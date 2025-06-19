@@ -15,6 +15,8 @@ dotenv.config();
 const app = express();
 const allowedOrigins = [
   'https://vercel.com/redas-projects-6381b074/event-hub',
+  'https://event-hub-three-zeta.vercel.app',
+  'http://localhost:5173' 
 ];
 
 app.use(helmet({
@@ -40,20 +42,31 @@ app.use(helmet({
     }
   }
 }));
+const allowedOriginPatterns = [
+  /^https:\/\/event-hub-.*\.vercel\.app$/, // Matches all Vercel deployments
+  /^https:\/\/event-hub-git-.*\.vercel\.app$/ // For branch deployments
+];
 
 app.use(cors({
-   origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    
+    // Check exact matches
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    
+    // Check regex patterns
+    if (allowedOriginPatterns.some(pattern => pattern.test(origin))) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Cache-Control',
-    'Pragma',
-    'X-Requested-With'
-  ],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'X-Requested-With'],
   exposedHeaders: ['Set-Cookie']
 }));
+
 
 
 app.use((req, res, next) => {

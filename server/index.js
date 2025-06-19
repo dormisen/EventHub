@@ -14,7 +14,7 @@ dotenv.config();
 
 const app = express();
 const allowedOrigins = [
-  'https://event-system-management.vercel.app',
+  'https://vercel.com/redas-projects-6381b074/event-hub',
 ];
 
 app.use(helmet({

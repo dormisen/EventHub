@@ -14,14 +14,14 @@ dotenv.config();
 
 const app = express();
 const allowedOrigins = [
-  'https://vercel.com/redas-projects-6381b074/event-hub',
   'https://event-hub-three-zeta.vercel.app',
-  'http://localhost:5173' 
+  'http://localhost:5173'
 ];
 
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
+      "default-src": ["'self'"],
       "script-src": [
         "'self'",
         "https://www.paypal.com",
@@ -33,15 +33,32 @@ app.use(helmet({
         "https://www.paypal.com",
         "https://www.sandbox.paypal.com",
         "https://api.sandbox.paypal.com",
-        "https://www.sandbox.paypal.com/xoplatform/logger/api/logger" // Add logger endpoint
+        "https://www.sandbox.paypal.com/xoplatform/logger/api/logger"
       ],
       "frame-src": [
         "https://www.paypal.com",
         "https://www.sandbox.paypal.com"
-      ]
+      ],
+      "frame-ancestors": ["'none'"],
+      "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "fonts.googleapis.com"
+      ],
+      "img-src": [
+        "'self'",
+        "data:",
+        "https://www.paypalobjects.com"
+      ],
+      "font-src": [
+        "'self'",
+        "fonts.gstatic.com"
+      ],
+      "upgrade-insecure-requests": []
     }
   }
 }));
+
 const allowedOriginPatterns = [
   /^https:\/\/event-hub-.*\.vercel\.app$/, // Matches all Vercel deployments
   /^https:\/\/event-hub-git-.*\.vercel\.app$/ // For branch deployments
@@ -50,15 +67,15 @@ const allowedOriginPatterns = [
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    
+
     // Check exact matches
     if (allowedOrigins.includes(origin)) return callback(null, true);
-    
+
     // Check regex patterns
     if (allowedOriginPatterns.some(pattern => pattern.test(origin))) {
       return callback(null, true);
     }
-    
+
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,

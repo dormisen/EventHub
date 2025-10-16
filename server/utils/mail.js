@@ -36,11 +36,7 @@ const createTransporter = async () => {
       auth: { user: testAccount.user, pass: testAccount.pass },
     });
   }
-<<<<<<< HEAD
  
-=======
-
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   // MailerSend production configuration
   return nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.mailersend.net',
@@ -51,11 +47,7 @@ const createTransporter = async () => {
       pass: process.env.EMAIL_PASSWORD,
     },
     tls: {
-<<<<<<< HEAD
       ciphers: 'TLSv1.2' 
-=======
-      ciphers: 'TLSv1.2' // Required for MailerSend TLS compliance
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     }
   });
 };

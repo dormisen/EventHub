@@ -9,10 +9,7 @@ import eventRoutes from './routes/Eventroute.js';
 import paymentRouter from './utils/PaymentRoute.js';
 import connectRouter from './routes/ConnectRoute.js';
 import walletRoutes from './routes/WalletRoute.js';
-<<<<<<< HEAD
 import webhookRoutes from './services/webhooks.js';
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 dotenv.config();
 
@@ -64,28 +61,16 @@ app.use(helmet({
 }));
 
 const allowedOriginPatterns = [
-<<<<<<< HEAD
   /^https:\/\/event-hub-.*\.vercel\.app$/,
   /^https:\/\/event-hub-git-.*\.vercel\.app$/ 
-=======
-  /^https:\/\/event-hub-.*\.vercel\.app$/, // Matches all Vercel deployments
-  /^https:\/\/event-hub-git-.*\.vercel\.app$/ // For branch deployments
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
 
-<<<<<<< HEAD
     if (allowedOrigins.includes(origin)) return callback(null, true);
 
-=======
-    // Check exact matches
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-
-    // Check regex patterns
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     if (allowedOriginPatterns.some(pattern => pattern.test(origin))) {
       return callback(null, true);
     }
@@ -114,10 +99,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/payment', paymentRouter);
 app.use('/api/connect', connectRouter);
 app.use('/api', walletRoutes);
-<<<<<<< HEAD
 app.use('/api', webhookRoutes);
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
@@ -132,8 +114,4 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
-<<<<<<< HEAD
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-=======
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20

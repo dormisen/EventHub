@@ -2,10 +2,7 @@ import express from 'express';
 import authMiddleware from '../Midleware/Authmidleware.js';
 import Wallet from '../models/Wallet.js';
 import Transaction from '../models/Transaction.js';
-<<<<<<< HEAD
 import PaymentService from '../services/paymentService.js';
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 const router = express.Router();
 

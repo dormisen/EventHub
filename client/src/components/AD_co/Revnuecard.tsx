@@ -53,7 +53,7 @@ export const RevenueChart: FC<RevenueChartProps> = ({ events }) => {
         labels: {
           color: '#4B5563',
           font: {
-            weight: '600'
+            weight: 'bold' as const
           }
         }
       }

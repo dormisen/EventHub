@@ -15,6 +15,14 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     select: false
   },
+<<<<<<< HEAD
+  // Absolute expiry for unverified accounts. If set, a TTL index will delete the document at this time.
+  verificationExpiresAt: {
+    type: Date,
+    select: false
+  },
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   isVerified: {
     type: Boolean,
     default: false
@@ -121,7 +129,10 @@ const UserSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
   }],
   verificationAccessToken: String,
+<<<<<<< HEAD
+=======
   isVerified: { type: Boolean, default: false },
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   isBlocked: { type: Boolean, default: false },
   resetPasswordToken: { type: String, select: false },
   resetPasswordExpire: { type: Date },
@@ -176,6 +187,12 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
+<<<<<<< HEAD
+// TTL index for unverified accounts: delete 1 hour after registration if not verified
+UserSchema.index({ verificationExpiresAt: 1 }, { expireAfterSeconds: 0, partialFilterExpression: { isVerified: false } });
+
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 // Organizer info validation middleware
 UserSchema.pre('save', function (next) {
   if (this.role === 'organizer' && this.organizerInfo) {
@@ -281,9 +298,12 @@ UserSchema.methods.upgradeToOrganizer = async function (organizerData) {
   if (!this.isVerified) {
     throw new Error('Email must be verified before becoming an organizer');
   }
+<<<<<<< HEAD
+=======
   if (!this.isVerified) {
     throw new Error('Email must be verified before becoming an organizer');
   }
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
   if (!organizerData.paypalEmail) {
     throw new Error('PayPal email is required for organizer verification');

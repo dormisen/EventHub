@@ -1,6 +1,16 @@
+<<<<<<< HEAD
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { createContext, useState, ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import API, { deleteUser as apiDeleteUser } from '../api/axios';
+=======
 import React, { createContext, useState, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import { User, AuthContextType as IAuthContext, OrganizerInfo } from '../assets/types';
 import debounce from 'lodash.debounce';
 
@@ -44,12 +54,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       debouncedCheckAuthStatus.cancel();
     };
+<<<<<<< HEAD
+  }, [debouncedCheckAuthStatus]);
+=======
   }, []);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   
   useEffect(() => {
     checkAuthStatus();
   }, []);
 
+<<<<<<< HEAD
+ const login = async (email: string, password: string, rememberMe: boolean = false) => {
+  try {
+    const res = await API.post('/auth/login', { 
+      email, 
+      password, 
+      rememberMe 
+    }, { withCredentials: true });
+    
+    setUser(res.data.user);
+    await _checkAuthStatus();
+    setIsAuthenticated(true);
+    setError(null);
+    
+    navigate('/profile');
+  } catch (error: unknown) {
+    const errorResponse = error as { response?: { data?: { msg?: string } } };
+    setError(errorResponse.response?.data?.msg || 'Login failed');
+    throw error;
+  }
+};
+=======
   const login = async (email: string, password: string) => {
     try {
       const res = await API.post('/auth/login', { email, password }, { withCredentials: true });
@@ -62,6 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw error;
     }
   };
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
   const logout = async () => {
     try {
@@ -99,8 +136,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } : null);
       await debouncedCheckAuthStatus();
       return res.data;
+<<<<<<< HEAD
+    } catch (error: unknown) {
+      const errorResponse = error as { response?: { data?: { msg?: string } } };
+      setError(errorResponse.response?.data?.msg || 'Organization registration failed');
+=======
     } catch (error: any) {
       setError(error.response?.data?.msg || 'Organization registration failed');
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       throw error;
     }
   };
@@ -112,8 +155,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const res = await API.post('/auth/send-verification-email', {}, { withCredentials: true });
       return res.data;
+<<<<<<< HEAD
+    } catch (error: unknown) {
+      const errorResponse = error as { response?: { data?: { msg?: string } } };
+      setError(errorResponse.response?.data?.msg || 'Failed to send verification email');
+=======
     } catch (error: any) {
       setError(error.response?.data?.msg || 'Failed to send verification email');
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       throw error;
     }
   };
@@ -126,12 +175,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         return true;
       }
       return false;
+<<<<<<< HEAD
+    } catch (error: unknown) {
+      const errorResponse = error as { response?: { data?: any }; message?: string };
+      console.error('Verification error:', errorResponse.response?.data || errorResponse.message);
+=======
     } catch (error: any) {
       console.error('Verification error:', error.response?.data || error.message);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       throw error;
     }
   };
   
+<<<<<<< HEAD
+  const deleteAccount = async () => {
+    try {
+      await apiDeleteUser();
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('authState');
+      navigate('/login');
+    } catch (err) {
+      setError('Failed to delete account');
+      throw err;
+    }
+  };
+
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   return (
     <AuthContext.Provider value={{
       user,
@@ -147,7 +218,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isVerifiedOrganizer,
       updateUser: async (userData: Partial<User>) => {
         setUser(prev => prev ? { ...prev, ...userData } : null);
+<<<<<<< HEAD
+      },
+      deleteAccount
+=======
       }
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     }}>
       {children}
     </AuthContext.Provider>

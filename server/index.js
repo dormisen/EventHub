@@ -9,17 +9,23 @@ import eventRoutes from './routes/Eventroute.js';
 import paymentRouter from './utils/PaymentRoute.js';
 import connectRouter from './routes/ConnectRoute.js';
 import walletRoutes from './routes/WalletRoute.js';
+<<<<<<< HEAD
+import webhookRoutes from './services/webhooks.js';
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 dotenv.config();
 
 const app = express();
 const allowedOrigins = [
-  'https://event-system-management.vercel.app',
+  'https://event-hub-three-zeta.vercel.app',
+  'http://localhost:5173'
 ];
 
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
+      "default-src": ["'self'"],
       "script-src": [
         "'self'",
         "https://www.paypal.com",
@@ -31,29 +37,67 @@ app.use(helmet({
         "https://www.paypal.com",
         "https://www.sandbox.paypal.com",
         "https://api.sandbox.paypal.com",
-        "https://www.sandbox.paypal.com/xoplatform/logger/api/logger" // Add logger endpoint
+        "https://www.sandbox.paypal.com/xoplatform/logger/api/logger"
       ],
       "frame-src": [
         "https://www.paypal.com",
         "https://www.sandbox.paypal.com"
-      ]
+      ],
+      "frame-ancestors": ["'none'"],
+      "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "fonts.googleapis.com"
+      ],
+      "img-src": [
+        "'self'",
+        "data:",
+        "https://www.paypalobjects.com"
+      ],
+      "font-src": [
+        "'self'",
+        "fonts.gstatic.com"
+      ],
+      "upgrade-insecure-requests": []
     }
   }
 }));
 
+const allowedOriginPatterns = [
+<<<<<<< HEAD
+  /^https:\/\/event-hub-.*\.vercel\.app$/,
+  /^https:\/\/event-hub-git-.*\.vercel\.app$/ 
+=======
+  /^https:\/\/event-hub-.*\.vercel\.app$/, // Matches all Vercel deployments
+  /^https:\/\/event-hub-git-.*\.vercel\.app$/ // For branch deployments
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
+];
+
 app.use(cors({
-   origin: allowedOrigins,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+
+<<<<<<< HEAD
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+
+=======
+    // Check exact matches
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+
+    // Check regex patterns
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
+    if (allowedOriginPatterns.some(pattern => pattern.test(origin))) {
+      return callback(null, true);
+    }
+
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Cache-Control',
-    'Pragma',
-    'X-Requested-With'
-  ],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma', 'X-Requested-With'],
   exposedHeaders: ['Set-Cookie']
 }));
+
 
 
 app.use((req, res, next) => {
@@ -70,6 +114,10 @@ app.use('/api/events', eventRoutes);
 app.use('/api/payment', paymentRouter);
 app.use('/api/connect', connectRouter);
 app.use('/api', walletRoutes);
+<<<<<<< HEAD
+app.use('/api', webhookRoutes);
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
@@ -84,4 +132,8 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 5000;
+<<<<<<< HEAD
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+=======
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20

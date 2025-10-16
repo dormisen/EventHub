@@ -1,6 +1,11 @@
 import express from "express";
 import Event from "../models/Event.js";
 import crypto from "crypto";
+<<<<<<< HEAD
+import transporter from "../utils/mail.js";
+
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";
@@ -20,6 +25,49 @@ const authLimiter = rateLimit({
   message: "Too many requests from this IP, please try again later",
   skipSuccessfulRequests: true,
 });
+<<<<<<< HEAD
+// Utility to hash refresh tokens before storing
+const hashToken = (token) => 
+  crypto.createHash("sha256").update(token).digest("hex");
+
+// Generate access + refresh token pair
+export const sendTokenResponse = async (user, res, rememberMe = false) => {
+  // Generate tokens with different expiration based on rememberMe
+  const accessTokenExpiry = "15m";
+  const refreshTokenExpiry = rememberMe ? "30d" : "7d"; // 30 days vs 7 days
+
+  const accessToken = jwt.sign(
+    { id: user._id, role: user.role }, 
+    process.env.JWT_SECRET, 
+    { expiresIn: accessTokenExpiry }
+  );
+
+  const refreshToken = jwt.sign(
+    { id: user._id, jti: crypto.randomUUID() }, 
+    process.env.JWT_REFRESH_SECRET, 
+    { expiresIn: refreshTokenExpiry }
+  );
+
+  // Hash before storing
+  const hashedRefresh = hashToken(refreshToken);
+
+  // Store only hashed token, and invalidate older ones
+  user.refreshTokens = [{ token: hashedRefresh, createdAt: new Date() }];
+  await user.save();
+
+  // Set cookie expiration based on rememberMe
+  const refreshTokenMaxAge = rememberMe ? 
+    30 * 24 * 60 * 60 * 1000 : // 30 days
+    7 * 24 * 60 * 60 * 1000;   // 7 days
+
+  // Set httpOnly cookies
+  res.cookie("accessToken", accessToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    maxAge: 15 * 60 * 1000, // 15 min
+    path: "/"
+=======
 const sendTokenResponse = async (user, res) => {
     const accessToken = jwt.sign(
     { id: user._id, role: user.role },
@@ -41,16 +89,27 @@ const sendTokenResponse = async (user, res) => {
     sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     maxAge: 900000,
     path: '/'
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   });
 
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
+<<<<<<< HEAD
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    maxAge: refreshTokenMaxAge, // Dynamic based on rememberMe
+    path: "/"
+  });
+
+  // Send safe user object
+=======
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     maxAge: 604800000,
     path: '/' // Add this line
   });
 
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   res.json({
     user: {
       id: user._id,
@@ -60,10 +119,64 @@ const sendTokenResponse = async (user, res) => {
       isVerified: user.isVerified
     }
   });
+<<<<<<< HEAD
+};
+
+// Refresh access token securely
+export const refreshAccessToken = async (refreshToken) => {
+  try {
+    // Verify JWT signature
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    // Calculate remaining time to determine if it was a "remember me" token
+    const remainingTime = decoded.exp * 1000 - Date.now();
+    const isLongLived = remainingTime > (14 * 24 * 60 * 60 * 1000); // More than 14 days remaining
+
+    // Hash and check against DB
+    const hashedRefresh = hashToken(refreshToken);
+    const user = await User.findById(decoded.id).select("+refreshTokens +role +isVerified");
+    if (!user) throw new Error("User not found");
+
+    const stored = user.refreshTokens.find(t => t.token === hashedRefresh);
+    if (!stored) throw new Error("Refresh token not recognized");
+
+    // Token rotation: remove old one and issue new
+    user.refreshTokens = user.refreshTokens.filter(t => t.token !== hashedRefresh);
+
+    // Maintain the same duration (30 days for remember me, 7 days for normal)
+    const refreshTokenExpiry = isLongLived ? "30d" : "7d";
+
+    const newRefreshToken = jwt.sign(
+      { id: user._id, jti: crypto.randomUUID() }, 
+      process.env.JWT_REFRESH_SECRET, 
+      { expiresIn: refreshTokenExpiry }
+    );
+    const hashedNew = hashToken(newRefreshToken);
+    user.refreshTokens.push({ token: hashedNew, createdAt: new Date() });
+    await user.save();
+
+    // Issue fresh access token
+    const newAccessToken = jwt.sign(
+      { id: user._id, role: user.role }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "15m" }
+    );
+
+    return { 
+      accessToken: newAccessToken, 
+      refreshToken: newRefreshToken,
+      refreshTokenMaxAge: isLongLived ? 30 * 24 * 60 * 60 * 1000 : 7 * 24 * 60 * 60 * 1000
+    };
+  } catch (error) {
+    throw new Error("Token refresh failed: " + error.message);
+  }
+};
+=======
 
 };
 
 
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 const verifyToken = (req, res, next) => {
   const token = req.cookies.accessToken;
@@ -84,15 +197,31 @@ const verifyToken = (req, res, next) => {
         }
 
         try {
+<<<<<<< HEAD
+          const { accessToken, refreshToken: newRefresh } = await refreshAccessToken(refreshToken);
+
+          res.cookie("accessToken", accessToken, {
+=======
           const newToken = await refreshAccessToken(refreshToken);
 
           res.cookie("accessToken", newToken, {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             path: '/',
             maxAge: 900000
           });
+<<<<<<< HEAD
+          res.cookie("refreshToken", newRefresh, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            path: '/',
+            maxAge: 604800000 // 7 days
+          });
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
           // Return special code to trigger client-side retry
           return res.status(428).json({
@@ -120,6 +249,8 @@ const verifyToken = (req, res, next) => {
     next();
   });
 };
+<<<<<<< HEAD
+=======
 
 // Update the token refresh logic
 const refreshAccessToken = async (refreshToken) => {
@@ -146,6 +277,7 @@ const refreshAccessToken = async (refreshToken) => {
     throw new Error('Token refresh failed: ' + error.message);
   }
 };
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 //  /me route
 router.get("/me", verifyToken, async (req, res) => {
   try {
@@ -172,6 +304,22 @@ router.get("/me", verifyToken, async (req, res) => {
     });
   }
 });
+<<<<<<< HEAD
+
+// Self-service account deletion
+router.delete('/me', verifyToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    await User.findByIdAndDelete(userId);
+    // Optionally: clean up related data (events, etc.)
+    res.json({ message: 'Account deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to delete account' });
+  }
+});
+
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 // Register route
 router.post(
   "/register",
@@ -212,17 +360,28 @@ router.post(
         .createHash('sha256')
         .update(verificationToken)
         .digest('hex');
+<<<<<<< HEAD
+      user.verificationTokenExpires = Date.now() + 60 * 60 * 1000; // 1 hour for verification link validity
+      user.verificationExpiresAt = new Date(Date.now() + 60 * 60 * 1000); // TTL delete at 1h if not verified
+
+
+      await sendVerificationEmail(user.email, verificationToken);
+=======
       user.verificationTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
 
 
       await sendVerificationEmail(user.email, verificationToken);
       await sendWelcomeEmail(user.email, user.name);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       await user.save();
 
       res.json({
         success: true,
         message: "Registration successful. Please check your email to verify your account.",
+<<<<<<< HEAD
+=======
         verificationToken: verificationToken,
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         user: {
           id: user._id,
           email: user.email,
@@ -246,15 +405,28 @@ router.post(
 
 router.post("/login", authLimiter, [
   body("email").isEmail().normalizeEmail(),
+<<<<<<< HEAD
+  body("password").notEmpty(),
+  body("rememberMe").optional().isBoolean() // Add rememberMe validation
+=======
   body("password").notEmpty()
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
+<<<<<<< HEAD
+    const { email, password, rememberMe = false } = req.body; // Extract rememberMe
+    const user = await User.findOne({ email })
+      .select("+password +loginAttempts +lockUntil")
+      .select("-__v");
+    
+=======
     const user = await User.findOne({ email: req.body.email })
       .select("+password +loginAttempts +lockUntil")
       .select("-__v");
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     if (!user) {
       return res.status(401).json({
         msg: "Invalid credentials",
@@ -269,7 +441,11 @@ router.post("/login", authLimiter, [
       });
     }
 
+<<<<<<< HEAD
+    const isMatch = await user.comparePassword(password);
+=======
     const isMatch = await user.comparePassword(req.body.password);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     if (!isMatch) {
       user.loginAttempts += 1;
 
@@ -295,7 +471,12 @@ router.post("/login", authLimiter, [
     user.lockUntil = undefined;
     await user.save();
 
+<<<<<<< HEAD
+    // Pass rememberMe to token response
+    await sendTokenResponse(user, res, rememberMe);
+=======
     sendTokenResponse(user, res);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   } catch (err) {
     console.error("Login Error:", err);
     res.status(500).json({
@@ -311,6 +492,23 @@ router.post("/refresh-token", async (req, res) => {
   if (!refreshToken) return res.status(401).json({ msg: "No refresh token" });
 
   try {
+<<<<<<< HEAD
+    const { accessToken, refreshToken: newRefresh, refreshTokenMaxAge } = await refreshAccessToken(refreshToken);
+    
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      maxAge: 15 * 60 * 1000, // 15 minutes
+      path: '/'
+    });
+    
+    res.cookie("refreshToken", newRefresh, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+      maxAge: refreshTokenMaxAge, // Use the calculated max age
+=======
     const newAccessToken = await refreshAccessToken(refreshToken);
 
     res.cookie("accessToken", newAccessToken, {
@@ -318,18 +516,26 @@ router.post("/refresh-token", async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
       maxAge: 900000,
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       path: '/'
     });
 
     res.json({
       success: true,
+<<<<<<< HEAD
+=======
       accessToken: newAccessToken // Add this line
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     });
   } catch (error) {
     console.error('Refresh token error:', error.message);
     res.status(401).json({ msg: "Invalid refresh token" });
   }
+<<<<<<< HEAD
+});;
+=======
 });
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 // Logout route
 router.post("/logout", async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
@@ -338,7 +544,13 @@ router.post("/logout", async (req, res) => {
       const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
       const user = await User.findById(decoded.id);
       if (user) {
+<<<<<<< HEAD
+       const hashed = hashToken(refreshToken);
+user.refreshTokens = user.refreshTokens.filter(t => t.token !== hashed);
+
+=======
         user.refreshTokens = user.refreshTokens.filter(t => t.token !== refreshToken);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         await user.save();
       }
     } catch (error) {
@@ -541,6 +753,10 @@ router.post("/verify-email", [
     user.isVerified = true;
     user.verificationToken = undefined;
     user.verificationTokenExpires = undefined;
+<<<<<<< HEAD
+    user.verificationExpiresAt = undefined; // prevent TTL deletion
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     await user.save();
 
     return res.json({
@@ -642,13 +858,22 @@ router.get('/test-email', async (req, res) => {
   }
 });
 // Admin middleware
+<<<<<<< HEAD
+const isAdmin = async (req, res, next) => {
+=======
 const isAdmin = (req, res, next) => {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json({ message: 'Unauthorized' });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+<<<<<<< HEAD
+    const user = await User.findById(decoded.id).select("role");
+    if (!user || user.role !== "admin") {
+=======
     if (decoded.role !== 'admin') {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       return res.status(403).json({ message: 'Admin access required' });
     }
     req.user = decoded;
@@ -729,11 +954,23 @@ adminRouter.delete('/users/:id', isAdmin, async (req, res) => {
 
 
 // Organizer middleware
+<<<<<<< HEAD
+const isOrganizer = async (req, res, next) => {
+  const user = await User.findById(req.user.id).select("role");
+  if (!user || user.role !== "organizer") {
+    return res.status(403).json({ message: "Organizer access required" });
+  }
+  next();
+};
+
+
+=======
 const isOrganizer = (req, res, next) => {
   if (req.user?.role === 'organizer') return next();
   res.status(403).json({ message: 'Organizer access required' });
 };
 
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 // Get organizer's events
 router.get('/my-events', isOrganizer, async (req, res) => {
   try {

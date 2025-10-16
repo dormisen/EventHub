@@ -104,6 +104,29 @@ const ContactUs = () => {
             <h3 className="text-2xl font-bold mb-6 text-gray-800">Frequently Asked Questions</h3>
             
             <div className="space-y-4">
+<<<<<<< HEAD
+              <div className="border-b border-gray-200 pb-4">
+                <h4 className="font-semibold text-gray-800">How quickly do you respond?</h4>
+                <p className="text-gray-600 mt-2">
+                  We typically reply within 1 business day. For urgent billing or access
+                  issues, include “URGENT” in the subject line.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-4">
+                <h4 className="font-semibold text-gray-800">Do you offer phone support?</h4>
+                <p className="text-gray-600 mt-2">
+                  Email is the fastest way to reach us. For enterprise plans, we provide
+                  a dedicated phone line and Slack channel.
+                </p>
+              </div>
+              <div className="border-b border-gray-200 pb-0">
+                <h4 className="font-semibold text-gray-800">Where can I report a bug?</h4>
+                <p className="text-gray-600 mt-2">
+                  Describe the steps to reproduce, your browser and OS, and attach screenshots.
+                  We’ll triage and follow up with a fix or workaround.
+                </p>
+              </div>
+=======
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="border-b border-gray-200 pb-4">
                   <h4 className="font-semibold text-gray-800">Question {i + 1}?</h4>
@@ -112,6 +135,7 @@ const ContactUs = () => {
                   </p>
                 </div>
               ))}
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             </div>
           </div>
         </motion.div>

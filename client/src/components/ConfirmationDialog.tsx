@@ -17,6 +17,14 @@ const ConfirmationDialog = ({
   onCancel,
   isProcessing = false
 }: ConfirmationDialogProps) => (
+<<<<<<< HEAD
+  <Dialog open={isOpen} onClose={onCancel} className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black opacity-30" aria-hidden="true" />
+    <div className="relative z-10 w-full max-w-md mx-auto">
+      <Dialog.Panel className="my-16 p-6 bg-white rounded-xl shadow-xl w-full">
+        <Dialog.Title className="text-lg font-bold mb-4">{title}</Dialog.Title>
+        <Dialog.Description className="mb-6">{message}</Dialog.Description>
+=======
   <Dialog open={isOpen} onClose={onCancel} className="fixed inset-0 z-10 overflow-y-auto">
     <div className="min-h-screen px-4 text-center">
       <div className="fixed inset-0 bg-black opacity-30" />
@@ -25,6 +33,7 @@ const ConfirmationDialog = ({
         <Dialog.Title className="text-lg font-bold mb-4">{title}</Dialog.Title>
         <Dialog.Description className="mb-6">{message}</Dialog.Description>
         
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         <div className="flex gap-4 justify-end">
           <button
             onClick={onCancel}
@@ -41,7 +50,11 @@ const ConfirmationDialog = ({
             {isProcessing ? 'Processing...' : 'Confirm'}
           </button>
         </div>
+<<<<<<< HEAD
+      </Dialog.Panel>
+=======
       </div>
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     </div>
   </Dialog>
 );

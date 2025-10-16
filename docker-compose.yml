@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  server:
+    build: ./server
+    container_name: event_server
+    restart: always
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/eventhub
+      - FRONTEND_URL=http://localhost:5173
+      - EMAIL_FROM_NAME=EventHub
+      - EMAIL_FROM_ADDRESS=no-reply@localhost
+      # For development, mail.js uses Ethereal automatically; for production set below:
+      - EMAIL_HOST=smtp.mailersend.net
+       - EMAIL_PORT=587
+      - EMAIL_SECURE=false
+       - EMAIL_USER=your_mailersend_username
+       - EMAIL_PASSWORD=your_mailersend_password
+
+  client:
+    build: ./client
+    container_name: event_client
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+    env_file:
+      - ./client/.env
+    environment:
+      - NODE_ENV=development
+      - VITE_API_PROXY_TARGET=http://server:5000
+      - VITE_API_BASE_URL=/api
+
+volumes:
+  mongo_data:

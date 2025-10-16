@@ -1,5 +1,9 @@
 import { EventType } from '../assets/types';
+<<<<<<< HEAD
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+=======
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'; // Changed port to 5000
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 export const fetchUserEvents = async (): Promise<EventType[]> => {
   try {
@@ -82,7 +86,11 @@ export const getEventDetails = async (eventId: string): Promise<EventType> => {
   }
 };
 export async function updateUser(userData: any) {
+<<<<<<< HEAD
+  const response = await fetch(`${API_BASE_URL}/users/profile`, {
+=======
   const response = await fetch('/api/users/profile', {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',

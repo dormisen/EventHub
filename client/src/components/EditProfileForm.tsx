@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+/* eslint-disable @typescript-eslint/no-explicit-any */
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import { useState } from 'react';
 import { User } from '../assets/types';
 
@@ -5,9 +9,16 @@ interface EditProfileFormProps {
   user: User;
   onSave: (data: any) => Promise<void>;
   onCancel: () => void;
+<<<<<<< HEAD
+  onDeleteAccount: () => void;
+}
+
+export const EditProfileForm = ({ user, onSave, onCancel, onDeleteAccount }: EditProfileFormProps) => {
+=======
 }
 
 export const EditProfileForm = ({ user, onSave, onCancel }: EditProfileFormProps) => {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   const [formData, setFormData] = useState({
     name: user.name,
     email: user.email,
@@ -58,6 +69,18 @@ export const EditProfileForm = ({ user, onSave, onCancel }: EditProfileFormProps
           Save Changes
         </button>
       </div>
+<<<<<<< HEAD
+      <div className="pt-4">
+        <button
+          type="button"
+          onClick={onDeleteAccount}
+          className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 w-full"
+        >
+          Delete Account
+        </button>
+      </div>
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     </form>
   );
 };

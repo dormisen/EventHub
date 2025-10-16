@@ -103,8 +103,18 @@ const OrganizerDashboard = () => {
       await API.delete(`/events/${eventId}`);
       setEvents(prev => prev.filter(event => event._id !== eventId));
       toast.success('Event deleted successfully');
+<<<<<<< HEAD
+    } catch (err: unknown) {
+      if (typeof err === 'object' && err !== null && 'response' in err) {
+        const errorObj = err as { response?: { data?: { msg?: string } } };
+        toast.error(errorObj.response?.data?.msg || 'Failed to delete event');
+      } else {
+        toast.error('Failed to delete event. Please try again later.');
+      }
+=======
     } catch (err: any) {
       toast.error(err?.message || 'Failed to delete event');
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     } finally {
       setDeleteCandidate(null);
     }
@@ -115,8 +125,18 @@ const OrganizerDashboard = () => {
       try {
         const res = await API.get('/events', { params: filters });
         setEvents(res.data);
+<<<<<<< HEAD
+      } catch (err: unknown) {
+        if (typeof err === 'object' && err !== null && 'response' in err) {
+          const errorObj = err as { response?: { data?: { msg?: string } } };
+          setError(errorObj.response?.data?.msg || 'Failed to load events');
+        } else {
+          setError('Failed to load events. Please try again later.');
+        }
+=======
       } catch (err: any) {
         setError(err?.message || 'Failed to load events');
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       } finally {
         setLoading(false);
       }

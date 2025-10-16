@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+export { default } from './privacy-policy';
+=======
 import { motion } from 'framer-motion';
 
 const PrivacyPolicy = () => {
@@ -40,3 +43,4 @@ const PrivacyPolicy = () => {
 };
 
 export default PrivacyPolicy;
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20

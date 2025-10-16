@@ -1,8 +1,5 @@
-<<<<<<< HEAD
  
 /* eslint-disable @typescript-eslint/no-explicit-any */
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/Authcontext';
 import { useNavigate } from 'react-router-dom';
@@ -36,7 +33,6 @@ interface TicketType {
   description: string;
 }
 
-<<<<<<< HEAD
 interface EventData {
   title: string;
   description: string;
@@ -49,17 +45,12 @@ interface EventData {
   media?: string[];
 }
 
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 export default function CreateEvent() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGeocoding, setIsGeocoding] = useState(false);
-<<<<<<< HEAD
   const [isUploading, setIsUploading] = useState(false);
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -68,14 +59,9 @@ export default function CreateEvent() {
       address: '',
       coordinates: { lat: 0, lng: 0 }
     } as LocationType,
-<<<<<<< HEAD
     media: [] as string[],
     tickets: [] as TicketType[],
     category: 'general'
-=======
-    tickets: [] as TicketType[],
-    media: [] as string[],
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   });
 
   useEffect(() => {
@@ -87,7 +73,6 @@ export default function CreateEvent() {
   }, [user, navigate]);
 
   const handleImageUpload = async (files: FileList) => {
-<<<<<<< HEAD
     const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
@@ -168,45 +153,18 @@ export default function CreateEvent() {
       return;
     }
 
-=======
-    const uploadedUrls: string[] = [];
-    for (const file of files) {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'your_upload_preset'); // Cloudinary preset
-
-      try {
-        const res = await axios.post(
-          `https://api.cloudinary.com/v1_1/your_cloud_name/image/upload`,
-          formData
-        );
-        uploadedUrls.push(res.data.secure_url);
-      } catch (error) {
-        toast.error('Failed to upload image');
-      }
-    }
-    setFormData(prev => ({ ...prev, media: [...prev.media, ...uploadedUrls] }));
-  };
-
-  const handleGeocodeAddress = async () => {
-    if (!formData.location.address) return;
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     setIsGeocoding(true);
     try {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(formData.location.address)}`
       );
-<<<<<<< HEAD
       
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       if (response.data.length > 0) {
         const { lat, lon } = response.data[0];
         setFormData(prev => ({
           ...prev,
           location: {
             ...prev.location,
-<<<<<<< HEAD
             coordinates: { 
               lat: parseFloat(lat), 
               lng: parseFloat(lon) 
@@ -220,14 +178,6 @@ export default function CreateEvent() {
     } catch (error) {
       console.error('Geocoding error:', error);
       toast.error('Geocoding service unavailable. Please try again.');
-=======
-            coordinates: { lat: parseFloat(lat), lng: parseFloat(lon) }
-          }
-        }));
-      }
-    } catch (error) {
-      toast.error('Could not find location');
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     }
     setIsGeocoding(false);
   };
@@ -247,7 +197,6 @@ export default function CreateEvent() {
     return null;
   };
 
-<<<<<<< HEAD
   const validateForm = (): boolean => {
     if (!formData.title.trim()) {
       toast.error('Event title is required');
@@ -308,18 +257,10 @@ export default function CreateEvent() {
     
     if (!validateForm()) {
       return;
-=======
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.location.coordinates.lat || !formData.location.coordinates.lng) {
-      return toast.error('Please select a location on the map');
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     }
 
     setIsSubmitting(true);
     try {
-<<<<<<< HEAD
       const eventData: EventData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
@@ -378,31 +319,11 @@ export default function CreateEvent() {
       }
       
       toast.error(errorMessage);
-=======
-      const eventData = {
-        ...formData,
-        location: formData.location.address,
-        coordinates: formData.location.coordinates,
-        date: new Date(formData.date).toISOString(),
-        tickets: formData.tickets.map(ticket => ({
-          ...ticket,
-          price: parseFloat(ticket.price),
-          quantity: parseInt(ticket.quantity)
-        }))
-      };
-
-      await API.post('/events', eventData);
-      toast.success('Event created successfully!');
-      navigate('/organizer/dashboard');
-    } catch (error: any) {
-      toast.error(error.response?.data?.msg || 'Failed to create event');
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     } finally {
       setIsSubmitting(false);
     }
   };
 
-<<<<<<< HEAD
   const addFreeTicket = () => {
     setFormData(prev => ({
       ...prev,
@@ -435,8 +356,6 @@ export default function CreateEvent() {
     }));
   };
 
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Create New Event</h1>
@@ -450,17 +369,11 @@ export default function CreateEvent() {
             <input
               type="text"
               required
-<<<<<<< HEAD
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Enter event title"
               maxLength={100}
-=======
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
-              value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             />
           </div>
 
@@ -471,17 +384,11 @@ export default function CreateEvent() {
             <textarea
               required
               rows={4}
-<<<<<<< HEAD
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Describe your event..."
               maxLength={1000}
-=======
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             />
           </div>
         </div>
@@ -495,7 +402,6 @@ export default function CreateEvent() {
             <input
               type="datetime-local"
               required
-<<<<<<< HEAD
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
@@ -525,13 +431,6 @@ export default function CreateEvent() {
               <option value="other">Other</option>
             </select>
           </div>
-=======
-              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
-              value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            />
-          </div>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         </div>
 
         {/* Location & Map */}
@@ -544,7 +443,6 @@ export default function CreateEvent() {
               <input
                 type="text"
                 required
-<<<<<<< HEAD
                 className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 placeholder="Enter full address..."
                 value={formData.location.address}
@@ -561,28 +459,16 @@ export default function CreateEvent() {
                     handleGeocodeAddress();
                   }
                 }}
-=======
-                className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-purple-500"
-                placeholder="Search address..."
-                value={formData.location.address}
-                onChange={(e) => setFormData({ ...formData, location: { ...formData.location, address: e.target.value } })}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               />
               <button
                 type="button"
                 onClick={handleGeocodeAddress}
-<<<<<<< HEAD
                 disabled={isGeocoding || !formData.location.address.trim()}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-=======
-                disabled={isGeocoding}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               >
                 {isGeocoding ? 'Searching...' : 'Search'}
               </button>
             </div>
-<<<<<<< HEAD
             <p className="text-sm text-gray-500 mt-1">
               Enter address and click Search, or click directly on the map
             </p>
@@ -609,56 +495,27 @@ export default function CreateEvent() {
             <p className="text-sm text-green-600">
               Location selected: {formData.location.coordinates.lat.toFixed(6)}, {formData.location.coordinates.lng.toFixed(6)}
             </p>
-=======
-          </div>
-
-          {formData.location.coordinates.lat !== 0 && (
-            <div className="h-96 rounded-lg overflow-hidden">
-              <MapContainer
-                center={[formData.location.coordinates.lat, formData.location.coordinates.lng]}
-                zoom={13}
-                className="h-full w-full"
-              >
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[formData.location.coordinates.lat, formData.location.coordinates.lng]} />
-                <MapClickHandler />
-              </MapContainer>
-            </div>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
           )}
         </div>
 
         {/* Media Upload */}
         <div className="space-y-4">
-<<<<<<< HEAD
           <label className="block text-sm font-medium text-gray-700">
             Event Photos {isUploading && <span className="text-blue-600">(Uploading...)</span>}
           </label>
           <div className="flex items-center justify-center w-full">
             <label className="flex flex-col items-center px-4 py-6 bg-white text-blue-600 rounded-lg border-2 border-dashed border-blue-400 cursor-pointer hover:border-blue-600 transition-colors">
-=======
-          <label className="block text-sm font-medium text-gray-700">Event Photos</label>
-          <div className="flex items-center justify-center w-full">
-            <label className="flex flex-col items-center px-4 py-6 bg-white text-blue-600 rounded-lg border-2 border-dashed border-blue-400 cursor-pointer hover:border-blue-600">
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               <svg className="w-8 h-8 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span className="text-sm">Drag images or click to upload</span>
-<<<<<<< HEAD
               <span className="text-xs text-gray-500 mt-1">Max 5MB per image</span>
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               <input
                 type="file"
                 multiple
                 accept="image/*"
                 className="hidden"
                 onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
-<<<<<<< HEAD
                 disabled={isUploading}
               />
             </label>
@@ -687,31 +544,11 @@ export default function CreateEvent() {
               ))}
             </div>
           )}
-=======
-              />
-            </label>
-          </div>
-          <div className="grid grid-cols-3 gap-4">
-            {formData.media.map((url, index) => (
-              <div key={index} className="relative group">
-                <img src={url} alt="" className="h-32 w-full object-cover rounded-lg" />
-                <button
-                  type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, media: prev.media.filter((_, i) => i !== index) }))}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         </div>
 
         {/* Tickets Section */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-<<<<<<< HEAD
             <div>
               <label className="block text-sm font-medium text-gray-700">Tickets</label>
               <p className="text-sm text-gray-500">Add ticket types for your event</p>
@@ -745,42 +582,18 @@ export default function CreateEvent() {
                     </span>
                   )}
                 </h4>
-=======
-            <label className="block text-sm font-medium text-gray-700">Tickets</label>
-            <button
-              type="button"
-              onClick={() => setFormData(prev => ({
-                ...prev,
-                tickets: [...prev.tickets, { name: '', price: '', quantity: '', description: '' }]
-              }))}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              Add Ticket Type
-            </button>
-          </div>
-
-          {formData.tickets.map((ticket, index) => (
-            <div key={index} className="p-4 border rounded-lg space-y-4">
-              <div className="flex justify-between">
-                <h4 className="font-medium">Ticket Type #{index + 1}</h4>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                 <button
                   type="button"
                   onClick={() => setFormData(prev => ({
                     ...prev,
                     tickets: prev.tickets.filter((_, i) => i !== index)
                   }))}
-<<<<<<< HEAD
                   className="text-red-600 hover:text-red-800 text-sm transition-colors"
-=======
-                  className="text-red-600 hover:text-red-800"
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                 >
                   Remove
                 </button>
               </div>
 
-<<<<<<< HEAD
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1 text-gray-700">Ticket Name *</label>
@@ -860,67 +673,12 @@ export default function CreateEvent() {
               <p className="mt-1 text-sm text-gray-500">Get started by adding your first ticket type.</p>
             </div>
           )}
-=======
-              <div className="grid grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="Ticket Name"
-                  value={ticket.name}
-                  onChange={e => {
-                    const newTickets = [...formData.tickets];
-                    newTickets[index] = { ...ticket, name: e.target.value };
-                    setFormData({ ...formData, tickets: newTickets });
-                  }}
-                  className="p-2 border rounded"
-                />
-                <input
-                  type="number"
-                  placeholder="Price"
-                  value={ticket.price}
-                  onChange={e => {
-                    const newTickets = [...formData.tickets];
-                    newTickets[index] = { ...ticket, price: e.target.value };
-                    setFormData({ ...formData, tickets: newTickets });
-                  }}
-                  className="p-2 border rounded"
-                />
-                <input
-                  type="number"
-                  placeholder="Quantity"
-                  value={ticket.quantity}
-                  onChange={e => {
-                    const newTickets = [...formData.tickets];
-                    newTickets[index] = { ...ticket, quantity: e.target.value };
-                    setFormData({ ...formData, tickets: newTickets });
-                  }}
-                  className="p-2 border rounded"
-                />
-                <input
-                  type="text"
-                  placeholder="Description"
-                  value={ticket.description}
-                  onChange={e => {
-                    const newTickets = [...formData.tickets];
-                    newTickets[index] = { ...ticket, description: e.target.value };
-                    setFormData({ ...formData, tickets: newTickets });
-                  }}
-                  className="p-2 border rounded"
-                />
-              </div>
-            </div>
-          ))}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         </div>
 
         <button
           type="submit"
-<<<<<<< HEAD
           disabled={isSubmitting || isUploading}
           className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-medium"
-=======
-          disabled={isSubmitting}
-          className="w-full py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:bg-gray-400 transition-colors"
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         >
           {isSubmitting ? 'Creating Event...' : 'Create Event'}
         </button>

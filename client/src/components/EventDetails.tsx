@@ -1,16 +1,9 @@
-<<<<<<< HEAD
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getEventDetails } from '../api/Event';
 import { ExclamationTriangleIcon, HeartIcon, ShareIcon } from '@heroicons/react/24/outline';
 import { HeartIcon as HeartSolid } from '@heroicons/react/24/solid';
-=======
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getEventDetails } from '../api/Event';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import { useStripe, useElements } from '@stripe/react-stripe-js';
 import { PaymentMethodSelector } from '../components/TicketSelector';
 import { EventType } from '../assets/types';
@@ -23,13 +16,9 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import L from 'leaflet';
 import { PayPalButton } from '../components/PAY/PayPalButton';
 import { Helmet } from 'react-helmet';
-import API from '../api/axios';
-<<<<<<< HEAD
 import debounce from 'lodash.debounce';
 import { motion, AnimatePresence } from 'framer-motion';
 
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 // Fix leaflet marker icons
 const DefaultIcon = L.icon({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -51,18 +40,12 @@ const EventDetails = () => {
   const [selectedTickets, setSelectedTickets] = useState<{ [key: string]: number }>({});
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [paymentProcessing, setPaymentProcessing] = useState(false);
-<<<<<<< HEAD
   const [isFavorite, setIsFavorite] = useState(false);
   const [, setImageLoading] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
 
-=======
-  const stripe = useStripe();
-  const elements = useElements();
-  const navigate = useNavigate();
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   useEffect(() => {
     if (!stripe || !elements) {
       setError('Payment system is initializing...');
@@ -70,21 +53,13 @@ const EventDetails = () => {
     }
     setError('');
   }, [stripe, elements]);
-<<<<<<< HEAD
-
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   useEffect(() => {
     let isMounted = true;
     const fetchEvent = async () => {
       try {
         const data = await getEventDetails(eventId!);
-<<<<<<< HEAD
         const debouncedCheck = debounce(checkAuthStatus, 500, { leading: true, trailing: false });
         await debouncedCheck();
-=======
-        await checkAuthStatus();
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         if (isMounted) setEvent(data);
       } catch (err) {
         if (isMounted) setError('Failed to load event details');
@@ -92,34 +67,21 @@ const EventDetails = () => {
         if (isMounted) setLoading(false);
       }
     };
-<<<<<<< HEAD
     fetchEvent();
     return () => { isMounted = false };
   }, [eventId, checkAuthStatus]);
-=======
-
-    fetchEvent();
-    return () => { isMounted = false };
-  }, [eventId]);
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
   const handleTicketChange = (ticketId: string, quantity: number) => {
     const ticket = event?.tickets.find(t => t._id === ticketId);
     if (!ticket) return;
 
-<<<<<<< HEAD
     quantity = Math.max(0, quantity); // Allow 0 to remove tickets
-=======
-    // Prevent quantity from going below 1
-    quantity = Math.max(1, quantity);
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
     if (quantity > ticket.quantity) {
       setError(`Only ${ticket.quantity} tickets available for ${ticket.name}`);
       return;
     }
 
-<<<<<<< HEAD
     if (quantity === 0) {
       const newSelected = { ...selectedTickets };
       delete newSelected[ticketId];
@@ -127,9 +89,6 @@ const EventDetails = () => {
     } else {
       setSelectedTickets(prev => ({ ...prev, [ticketId]: quantity }));
     }
-=======
-    setSelectedTickets(prev => ({ ...prev, [ticketId]: quantity }));
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     setError('');
   };
 
@@ -140,35 +99,9 @@ const EventDetails = () => {
     }, 0);
   };
 
-<<<<<<< HEAD
   const totalTickets = Object.values(selectedTickets).reduce((sum, qty) => sum + qty, 0);
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
-  const handlePayPalPayment = async () => {
-    try {
-      setPaymentProcessing(true);
-      const { data } = await API.post('/payment/create-paypal-order', {
-        eventId,
-        tickets: Object.entries(selectedTickets).map(([id, qty]) => ({
-          id,
-          quantity: qty
-        }))
-      });
 
-<<<<<<< HEAD
-=======
-      // Redirect to PayPal approval URL
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
-      window.location.href = data.approvalUrl;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An error occurred during payment';
-      setError(errorMessage);
-      setPaymentProcessing(false);
-    }
-  };
-
-<<<<<<< HEAD
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -199,41 +132,10 @@ const EventDetails = () => {
           <p className="text-gray-400 text-sm">Getting everything ready for you</p>
         </div>
       </motion.div>
-=======
-
-  if (!event?.organizer?.organizerInfo) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
-        <ExclamationTriangleIcon className="w-16 h-16 text-yellow-500 mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Payment Not Ready</h2>
-        <p className="text-gray-600 max-w-md">Please wait while we load the payment information.</p>
-      </div>
-    );
-  }
-
-  if (!event || !event.organizer.organizerInfo?.paypalMerchantId ||
-    event.organizer.organizerInfo.paypalAccountStatus !== 'verified') {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
-        <ExclamationTriangleIcon className="w-16 h-16 text-yellow-500 mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Tickets Unavailable</h2>
-        <p className="text-gray-600 max-w-md">The event organizer hasn't set up payment processing yet.</p>
-      </div>
-    );
-  }
-
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse flex flex-col items-center gap-4">
-        <LoadingSpinner size="large" />
-        <p className="text-gray-600">Loading event details...</p>
-      </div>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     </div>
   );
 
   if (error) return (
-<<<<<<< HEAD
     <div className="min-h-screen flex flex-col items-center justify-center text-center p-8 bg-gradient-to-br from-gray-50 to-red-50">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
@@ -621,227 +523,13 @@ const EventDetails = () => {
               </div>
             </motion.div>
           </div>
-=======
-    <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
-      <ExclamationTriangleIcon className="w-16 h-16 text-red-500 mb-4" />
-      <h2 className="text-2xl font-semibold mb-2">Oops! Something went wrong</h2>
-      <p className="text-gray-600 mb-4 max-w-md">{error}</p>
-      <button
-        onClick={() => window.location.reload()}
-        className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-      >
-        Try Again
-      </button>
-    </div>
-  );
-
-  if (!event) return <div className="text-center mt-8">Event not found</div>;
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <Helmet>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
-      </Helmet>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="mb-8 flex items-center text-gray-600 hover:text-indigo-600 transition-colors"
-      >
-        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-        </svg>
-        Back to Events
-      </button>
-
-      <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2">
-          <h1
-            className="text-4xl font-bold mb-4 text-gray-900"
-            style={{ fontFamily: 'Poppins, sans-serif' }}
-          >
-            {event.title}
-          </h1>
-
-          <div className="flex items-center gap-4 mb-6 text-gray-600">
-            <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
-              <CalendarIcon className="w-5 h-5" />
-              <span className="text-sm font-medium">
-                {new Date(event.date).toLocaleDateString('en-US', {
-                  weekday: 'long',
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </span>
-            </div>
-            <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
-              <MapPinIcon className="w-5 h-5" />
-              <span className="text-sm font-medium">{event.location}</span>
-            </div>
-          </div>
-
-          {event.media && event.media.length > 0 ? (
-            <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
-              <Carousel
-                showArrows={true}
-                showThumbs={event.media.length > 1}
-                showStatus={false}
-                infiniteLoop={true}
-                className="event-carousel"
-              >
-                {event.media.map((mediaUrl, index) => (
-                  <div key={index} className="h-96 relative">
-                    <img
-                      src={mediaUrl}
-                      alt={`Event media ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                      <p className="text-white text-sm text-right">
-                        Photo {index + 1} of {event.media?.length ?? 0}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </Carousel>
-            </div>
-          ) : (
-            <div className="mb-8 rounded-xl overflow-hidden shadow-lg">
-              <img
-                src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800&q=80"
-                alt="Default event"
-                className="w-full h-96 object-cover"
-              />
-            </div>
-          )}
-
-          <div className="prose max-w-none mb-8">
-            <h3 className="text-2xl font-bold mb-4 text-gray-900">About the Event</h3>
-            <p className="text-gray-700 leading-relaxed text-lg">{event.description}</p>
-          </div>
-
-          {event.cordinates && (
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">Event Location</h3>
-              <div className="bg-gray-100 p-6 rounded-xl mb-4">
-                <div className="flex items-center gap-3 mb-4">
-                  <MapPinIcon className="w-8 h-8 text-indigo-600" />
-                  <div>
-                    <p className="font-medium text-gray-900">{event.location}</p>
-                    <p className="text-sm text-gray-600">Exact location provided after purchase</p>
-                  </div>
-                </div>
-                <div className="h-96 rounded-xl overflow-hidden shadow-lg relative">
-                  <MapContainer
-                    center={[event.cordinates.lat, event.cordinates.lng]}
-                    zoom={15}
-                    className="h-full w-full"
-                    scrollWheelZoom={true}
-                  >
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
-                    <Marker position={[event.cordinates.lat, event.cordinates.lng]}>
-                      <Popup className="text-sm font-medium">
-                        <div className="flex items-center gap-2">
-                          <MapPinIcon className="w-5 h-5 text-indigo-600" />
-                          {event.location}
-                        </div>
-                      </Popup>
-                    </Marker>
-                  </MapContainer>
-                  <div className="absolute top-2 right-2 z-[1000] bg-white p-2 rounded-lg shadow-md">
-                    <p className="text-xs text-gray-600">
-                      {event.cordinates.lat.toFixed(4)}, {event.cordinates.lng.toFixed(4)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="md:col-span-1 sticky top-8 h-fit bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-          <h3 className="text-2xl font-bold mb-6 text-gray-900">Tickets</h3>
-
-          {event.tickets?.map(ticket => (
-            <div key={ticket._id} className="mb-4 p-4 border rounded-lg hover:border-indigo-200 transition-colors bg-gray-50">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h4 className="font-semibold text-gray-900 text-lg">{ticket.name}</h4>
-                  <p className="text-xl font-bold text-indigo-600 mb-2">${ticket.price.toFixed(2)}</p>
-                  <p className="text-sm text-gray-500 mb-3">
-                    {ticket.quantity > 0
-                      ? `${ticket.quantity} tickets remaining`
-                      : 'Sold out'}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handleTicketChange(ticket._id, (selectedTickets[ticket._id] || 1) - 1)}
-                      className="px-3 py-1 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50"
-                      disabled={(selectedTickets[ticket._id] || 1) <= 1}
-                    >
-                      -
-                    </button>
-                    <span className="w-8 text-center text-lg font-medium">
-                      {selectedTickets[ticket._id] || 0}
-                    </span>
-                    <button
-                      onClick={() => handleTicketChange(ticket._id, (selectedTickets[ticket._id] || 0) + 1)}
-                      className="px-3 py-1 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
-                      disabled={(selectedTickets[ticket._id] || 0) >= ticket.quantity}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          {Object.values(selectedTickets).some(qty => qty > 0) && (
-            <div className="border-t pt-4 mt-4">
-              <PaymentMethodSelector onMethodSelect={() => setShowPaymentForm(true)} />
-              {showPaymentForm && (
-                <>
-                  {paymentProcessing ? (
-                    <div className="text-center py-4">
-                      <LoadingSpinner size="small" />
-                      <p className="text-sm text-gray-600 mt-2">Processing payment...</p>
-                    </div>
-                  ) : (
-                    <PayPalButton
-                      amount={calculateTotal()}
-                      onSuccess={async () => {
-                        await handlePayPalPayment();
-                        navigate('/payment-success');
-                      }}
-                      onError={(err) => {
-                        setError(err.message);
-                        setPaymentProcessing(false);
-                      }}
-                    />
-                  )}
-                </>
-              )}
-
-            </div>
-          )}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         </div>
       </div>
     </div>
   );
 };
 
-<<<<<<< HEAD
 // Icon Components
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 const CalendarIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />

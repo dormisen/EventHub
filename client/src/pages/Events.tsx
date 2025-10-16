@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 import { useState, useEffect, useCallback } from 'react';
 import { useDebounce } from 'use-debounce';
 import API from '../api/axios';
@@ -22,11 +19,7 @@ const ErrorBanner = ({ message, onRetry }: { message: string; onRetry: () => voi
       </div>
       <button 
         onClick={onRetry}
-<<<<<<< HEAD
         className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-medium"
-=======
-        className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       >
         Retry
       </button>
@@ -35,11 +28,7 @@ const ErrorBanner = ({ message, onRetry }: { message: string; onRetry: () => voi
 );
 
 const EmptyState = ({ message }: { message: string }) => (
-<<<<<<< HEAD
   <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-200">
-=======
-  <div className="text-center py-16 bg-white rounded-2xl shadow-sm">
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
@@ -56,7 +45,6 @@ interface EventGridProps {
   totalEvents: number;
 }
 
-<<<<<<< HEAD
 const EventGrid = ({ events, loading, hasMore, onLoadMore, totalEvents }: EventGridProps) => (
   <>
     {/* Results Count */}
@@ -69,26 +57,17 @@ const EventGrid = ({ events, loading, hasMore, onLoadMore, totalEvents }: EventG
       </div>
     )}
 
-=======
-const EventGrid = ({ events, loading, hasMore, onLoadMore }: EventGridProps) => (
-  <>
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {events.map((event) => (
         <EventCard key={event._id} event={event} variant="user" />
       ))}
 
-<<<<<<< HEAD
       {loading && [...Array(6)].map((_, i) => (
-=======
-      {loading && [...Array(3)].map((_, i) => (
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         <Skeleton key={i} className="h-96 rounded-2xl" />
       ))}
     </div>
 
     {hasMore && !loading && events.length > 0 && (
-<<<<<<< HEAD
       <div className="mt-12 text-center">
         <button
           onClick={onLoadMore}
@@ -101,18 +80,6 @@ const EventGrid = ({ events, loading, hasMore, onLoadMore }: EventGridProps) => 
 
     {!loading && events.length === 0 && (
       <EmptyState message="Try adjusting your filters or search query to find more events." />
-=======
-      <button
-        onClick={onLoadMore}
-        className="mt-8 w-full py-3 px-4 text-center bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-      >
-        Load More Events
-      </button>
-    )}
-
-    {!loading && events.length === 0 && (
-      <EmptyState message="Try adjusting your filters or search query" />
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     )}
   </>
 );
@@ -140,7 +107,6 @@ const Events = () => {
       setLoading(true);
       setError('');
       
-<<<<<<< HEAD
       // Build query params
       const params: any = { 
         page: reset ? 1 : page,
@@ -183,42 +149,11 @@ const Events = () => {
       } else {
         setError('Failed to load events. Please try again later.');
       }
-=======
-      // Parse price range
-      let minPrice, maxPrice;
-      if (filters.priceRange) {
-        [minPrice, maxPrice] = filters.priceRange.split('-').map(Number);
-      }
-
-      const response = await API.get('/events/public/events', {
-        params: { 
-          page: reset ? 1 : page,
-          search: debouncedQuery,
-          upcomingOnly: true,
-          category: filters.category,
-          date: filters.date,
-          minPrice,
-          maxPrice,
-          sort: filters.sort
-        }
-      });
-      
-      if (reset) {
-        setEvents(response.data.events);
-      } else {
-        setEvents(prev => [...prev, ...response.data.events]);
-      }
-      setTotalEvents(response.data.total);
-      setHasMore(response.data.page < response.data.pages);
-    } catch (err: any) {
-      setError(err.response?.data?.msg || 'Failed to load events. Please try again later.');
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     } finally {
       setLoading(false);
     }
   }, [page, debouncedQuery, filters]);
 
-<<<<<<< HEAD
   // Reset to page 1 when filters change
   useEffect(() => {
     setPage(1);
@@ -277,47 +212,11 @@ const Events = () => {
       {error && <ErrorBanner message={error} onRetry={() => fetchEvents(true)} />}
 
       {/* Events Grid */}
-=======
-  useEffect(() => {
-    fetchEvents(true);
-    setPage(1);
-  }, [debouncedQuery, filters, fetchEvents]);
-
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Discover Events
-        </h1>
-        
-        <div className="max-w-2xl mx-auto mb-8">
-          <input
-            type="text"
-            placeholder="Search events..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-6 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 shadow-sm"
-          />
-        </div>
-
-        <EventFilters 
-          filters={filters}
-          onFilterChange={setFilters}
-        />
-      </div>
-
-      {error && <ErrorBanner message={error} onRetry={() => fetchEvents(true)} />}
-
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       <EventGrid
         events={events}
         loading={loading}
         hasMore={hasMore}
-<<<<<<< HEAD
         onLoadMore={handleLoadMore}
-=======
-        onLoadMore={() => setPage(prev => prev + 1)}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         totalEvents={totalEvents}
       />
     </div>

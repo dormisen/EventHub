@@ -3,10 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import API from "../api/axios";
 import { FiAlertCircle, FiCheck, FiEye, FiEyeOff, FiUserPlus } from "react-icons/fi";
 import { motion } from "framer-motion";
-<<<<<<< HEAD
 import EHlogo from "../assets/images/EHlogo.png";
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 interface RegisterFormData {
   name: string;
@@ -26,10 +23,7 @@ const Register: React.FC = () => {
   const [serverError, setServerError] = useState("");
   const [success, setSuccess] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
-<<<<<<< HEAD
   const [capsLockOn, setCapsLockOn] = useState(false);
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   const navigate = useNavigate();
 
   const calculatePasswordStrength = (password: string) => {
@@ -77,7 +71,6 @@ const Register: React.FC = () => {
     try {
       await API.post("/auth/register", formData);
       setSuccess(true);
-<<<<<<< HEAD
     } catch (error: unknown) {
       console.error("Registration error:", error);
       if (typeof error === "object" && error !== null && "response" in error) {
@@ -97,22 +90,6 @@ const Register: React.FC = () => {
         } else {
           setServerError("An unexpected error occurred. Please try again.");
         }
-=======
-    } catch (error: any) {
-      console.error("Registration error:", error);
-      if (error.response?.data?.errors) {
-        const apiErrors: { [key: string]: string } = {};
-        error.response.data.errors.forEach((err: any) => {
-          if (err.param) {
-            apiErrors[err.param] = err.msg;
-          }
-        });
-        setErrors(apiErrors);
-      } else if (error.response?.data?.message) {
-        setServerError(error.response.data.message);
-      } else if (error.request) {
-        setServerError("No response from server. Please check your connection.");
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       } else {
         setServerError("An unexpected error occurred. Please try again.");
       }
@@ -123,12 +100,8 @@ const Register: React.FC = () => {
 
   if (success) {
     return (
-<<<<<<< HEAD
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center flex-col justify-center px-4 py-12 overflow-hidden">
         <img loading='lazy' src={EHlogo} alt="EHlogo" className="w-32 h-32 mb-4" />
-=======
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center px-4 py-12">
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -161,12 +134,8 @@ const Register: React.FC = () => {
   }
 
   return (
-<<<<<<< HEAD
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center flex-col justify-center px-4 py-12 overflow-hidden">
       <img loading='lazy' src={EHlogo} alt="EHlogo" className="w-32 h-32 mb-4" />
-=======
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center px-4 py-12">
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -257,10 +226,7 @@ const Register: React.FC = () => {
                     setFormData({ ...formData, password: e.target.value });
                     setPasswordStrength(calculatePasswordStrength(e.target.value));
                   }}
-<<<<<<< HEAD
                   onKeyUp={(e) => setCapsLockOn((e as any).getModifierState && (e as any).getModifierState('CapsLock'))}
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                   className={`w-full rounded-lg border ${
                     errors.password ? 'border-red-500' : 'border-gray-200'
                   } px-4 py-3 text-sm shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 ${
@@ -292,23 +258,16 @@ const Register: React.FC = () => {
                   <FiAlertCircle className="flex-shrink-0" /> {errors.password}
                 </p>
               )}
-<<<<<<< HEAD
               {!errors.password && capsLockOn && (
                 <p className="mt-2 text-sm text-amber-600 flex items-center gap-1">
                   <FiAlertCircle className="flex-shrink-0" /> Caps Lock is on
                 </p>
               )}
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             </div>
 
             <button
               type="submit"
-<<<<<<< HEAD
               disabled={isLoading || !formData.name || !formData.email || !formData.password}
-=======
-              disabled={isLoading}
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               className="w-full py-3 px-6 flex justify-center items-center gap-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 disabled:opacity-70"
             >
               {isLoading ? (

@@ -1,10 +1,7 @@
 import axios from 'axios';
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 const API = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
   withCredentials: true,
@@ -15,11 +12,7 @@ const API = axios.create({
 });
 
 let isRefreshing = false;
-<<<<<<< HEAD
 let failedRequests: Array<() => void> = [];
-=======
-let failedRequests: any[] = [];
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 API.interceptors.response.use(
   response => response,
@@ -54,10 +47,6 @@ API.interceptors.response.use(
   }
 );
 
-<<<<<<< HEAD
 export default API;
 
 export const deleteUser = () => API.delete('/auth/me');
-=======
-export default API;
->>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20

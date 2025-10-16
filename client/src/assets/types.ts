@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 /* eslint-disable @typescript-eslint/no-explicit-any */
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 export interface OrganizerInfo {
   organizationName: string;
   description: string;
@@ -34,7 +37,11 @@ export interface User {
 export type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean;
+<<<<<<< HEAD
   login: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+=======
+  login: (email: string, password: string) => Promise<void>;
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   logout: () => Promise<void>;
   error: string | null;
   refreshToken: () => Promise<void>;
@@ -44,7 +51,10 @@ export type AuthContextType = {
   verifyEmail: (token: string) => Promise<any>;
   checkAuthStatus: () => Promise<void>;
   isVerifiedOrganizer: boolean;
+<<<<<<< HEAD
   deleteAccount: () => Promise<void>;
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 };
 
 export interface EventType {
@@ -100,9 +110,12 @@ export interface EventFiltersProps {
   filters: {
     status: string;
     date: string;
+<<<<<<< HEAD
     priceRange: string;
     category: string;
     location: string;
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     sort: string;
   };
   onFilterChange: React.Dispatch<React.SetStateAction<{
@@ -114,4 +127,8 @@ export interface EventFiltersProps {
     sort: string;
   }>>;
   organizerView?: boolean;
+<<<<<<< HEAD
+=======
+
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 }

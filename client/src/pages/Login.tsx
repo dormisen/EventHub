@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/Authcontext";
+<<<<<<< HEAD
 import { FiMail, FiLock, FiAlertCircle, FiEye, FiEyeOff } from "react-icons/fi";
 import { motion } from "framer-motion";
 import EHlogo from "../assets/images/EHlogo.png";
@@ -17,6 +18,15 @@ const Login: React.FC = () => {
     general?: string;
   }>({});
   const { login } = useAuth();
+=======
+import { FiMail, FiLock, FiAlertCircle } from "react-icons/fi";
+import { motion } from "framer-motion";
+const Login: React.FC = () => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
+  const { login, checkAuthStatus } = useAuth();
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,6 +51,7 @@ const Login: React.FC = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+<<<<<<< HEAD
   e.preventDefault();
   if (!validateForm()) return;
 
@@ -83,6 +94,35 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center flex-col justify-center px-4 py-12 overflow-hidden">
       <img loading='lazy' src={EHlogo} alt="EHlogo" className="w-32 h-32 mb-4" />
+=======
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      await login(formData.email, formData.password);
+      await checkAuthStatus();
+      navigate("/profile");
+    } catch (error: any) {
+      const errorCode = error.response?.data?.code;
+      const errorMessage = error.response?.data?.msg || "Login failed. Please try again later.";
+
+      if (errorCode === "EMAIL_NOT_VERIFIED") {
+        navigate("/verify-email", { state: { email: formData.email } });
+        return;
+      }
+
+      setErrors({ general: errorMessage });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center px-4 py-12">
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -96,6 +136,7 @@ const Login: React.FC = () => {
 
         <div className="p-6 sm:p-8">
           {errors.general && (
+<<<<<<< HEAD
             <div
               className={`mb-4 p-3 rounded-lg flex items-start gap-2 ${
                 location.state?.success
@@ -103,18 +144,29 @@ const Login: React.FC = () => {
                   : "bg-red-50 text-red-600"
               }`}
             >
+=======
+            <div className={`mb-4 p-3 rounded-lg flex items-start gap-2 ${location.state?.success
+                ? "bg-green-50 text-green-600"
+                : "bg-red-50 text-red-600"
+              }`}>
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               <FiAlertCircle className="flex-shrink-0 mt-0.5" />
               <span>{errors.general}</span>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
+<<<<<<< HEAD
             {/* Email */}
             <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
+=======
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                 Email
               </label>
               <div className="relative">
@@ -125,6 +177,7 @@ const Login: React.FC = () => {
                   id="email"
                   name="email"
                   type="email"
+<<<<<<< HEAD
                   autoComplete="email"
                   value={formData.email}
                   onChange={(e) =>
@@ -135,6 +188,13 @@ const Login: React.FC = () => {
                   } text-sm shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 ${
                     errors.email ? "focus:ring-red-500" : "focus:ring-blue-500"
                   }`}
+=======
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className={`w-full pl-10 pr-3 py-2.5 rounded-lg border ${errors.email ? "border-red-500" : "border-gray-200"
+                    } text-sm shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 ${errors.email ? "focus:ring-red-500" : "focus:ring-blue-500"
+                    }`}
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                 />
               </div>
               {errors.email && (
@@ -144,12 +204,17 @@ const Login: React.FC = () => {
               )}
             </div>
 
+<<<<<<< HEAD
             {/* Password */}
             <div>
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
+=======
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                 Password
               </label>
               <div className="relative">
@@ -159,6 +224,7 @@ const Login: React.FC = () => {
                 <input
                   id="password"
                   name="password"
+<<<<<<< HEAD
                   type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   value={formData.password}
@@ -182,12 +248,22 @@ const Login: React.FC = () => {
                 >
                   {showPassword ? <FiEyeOff className="h-5 w-5" /> : <FiEye className="h-5 w-5" />}
                 </button>
+=======
+                  type="password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className={`w-full pl-10 pr-3 py-2.5 rounded-lg border ${errors.password ? "border-red-500" : "border-gray-200"
+                    } text-sm shadow-sm transition-all duration-300 focus:outline-none focus:ring-2 ${errors.password ? "focus:ring-red-500" : "focus:ring-blue-500"
+                    }`}
+                />
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               </div>
               {errors.password && (
                 <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
                   <FiAlertCircle className="flex-shrink-0" /> {errors.password}
                 </p>
               )}
+<<<<<<< HEAD
               {!errors.password && capsLockOn && (
                 <p className="mt-2 text-sm text-amber-600 flex items-center gap-1">
                   <FiAlertCircle className="flex-shrink-0" /> Caps Lock is on
@@ -196,13 +272,22 @@ const Login: React.FC = () => {
             </div>
 
             {/* Remember Me */}
+=======
+            </div>
+
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <input
                   id="remember-me"
+<<<<<<< HEAD
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
+=======
+                  name="remember-me"
+                  type="checkbox"
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
                   className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                 />
                 <label htmlFor="remember-me" className="text-sm text-gray-700">
@@ -217,20 +302,34 @@ const Login: React.FC = () => {
               </Link>
             </div>
 
+<<<<<<< HEAD
             {/* Submit */}
             <button
               type="submit"
               disabled={isLoading || !formData.email || !formData.password}
+=======
+            <button
+              type="submit"
+              disabled={isLoading}
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               className="w-full py-3 px-6 flex justify-center items-center gap-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-all duration-300 disabled:opacity-70"
             >
               {isLoading ? (
                 <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
               ) : (
+<<<<<<< HEAD
                 "Sign in"
+=======
+                'Sign in'
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
               )}
             </button>
           </form>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600">
               Don't have an account?{" "}
@@ -248,4 +347,8 @@ const Login: React.FC = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Login;
+=======
+export default Login;
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20

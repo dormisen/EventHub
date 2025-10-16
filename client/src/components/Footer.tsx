@@ -57,9 +57,15 @@ const Footer = () => {
   ];
 
   return (
+<<<<<<< HEAD
     <footer className="bg-gradient-to-r from-gray-900 to-black text-white pt-8 pb-4">
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+=======
+    <footer className="bg-gradient-to-r from-gray-900 to-black text-white pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
           {/* Brand Column */}
           <div>
             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
@@ -165,15 +171,24 @@ const Footer = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         <div className="border-t border-gray-800 pt-4 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm mb-2 md:mb-0">
+=======
+        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-500 text-sm mb-4 md:mb-0">
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             © {new Date().getFullYear()} EventHub. All rights reserved.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={scrollToTop}
+<<<<<<< HEAD
             className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full transition-colors flex items-center gap-2"
+=======
+            className="bg-indigo-600 hover:bg-indigo-700 p-3 rounded-full transition-colors flex items-center gap-2"
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             aria-label="Back to top"
           >
             <ArrowUp className="w-5 h-5" />

@@ -104,6 +104,7 @@ const ContactUs = () => {
             <h3 className="text-2xl font-bold mb-6 text-gray-800">Frequently Asked Questions</h3>
             
             <div className="space-y-4">
+<<<<<<< HEAD
               <div className="border-b border-gray-200 pb-4">
                 <h4 className="font-semibold text-gray-800">How quickly do you respond?</h4>
                 <p className="text-gray-600 mt-2">
@@ -125,6 +126,16 @@ const ContactUs = () => {
                   We’ll triage and follow up with a fix or workaround.
                 </p>
               </div>
+=======
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="border-b border-gray-200 pb-4">
+                  <h4 className="font-semibold text-gray-800">Question {i + 1}?</h4>
+                  <p className="text-gray-600 mt-2">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui mauris.
+                  </p>
+                </div>
+              ))}
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
             </div>
           </div>
         </motion.div>

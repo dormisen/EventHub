@@ -4,6 +4,7 @@ import User from '../models/User.js';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+<<<<<<< HEAD
 const defaultImages = [
   'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=800',
   'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&w=800',
@@ -13,6 +14,11 @@ const defaultImages = [
 
 const router = express.Router();
 
+=======
+const router = express.Router();
+
+
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 const verifyOrganizer = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
@@ -25,7 +31,11 @@ const verifyOrganizer = async (req, res, next) => {
       return res.status(403).json({ msg: "Organizer access required" });
     }
     
+<<<<<<< HEAD
     req.user = user;
+=======
+    req.user = user; // Attach the user document
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     next();
   } catch (error) {
     res.status(401).json({ msg: "Invalid token" });
@@ -35,6 +45,7 @@ const verifyOrganizer = async (req, res, next) => {
 // POST /events route
 router.post('/', verifyOrganizer, async (req, res) => {
   try {
+<<<<<<< HEAD
     console.log('Received event data:', req.body);
     
     const { title, description, date, location, tickets, categories } = req.body;
@@ -113,16 +124,44 @@ router.get('/public/events', async (req, res) => {
     } = req.query;
     
     const pageSize = 12;
+=======
+    const eventData = {
+      ...req.body,
+      organizer: req.user._id, // Ensure this is correctly set
+      image: req.body.image || defaultImages[Math.floor(Math.random() * defaultImages.length)],
+      tickets: req.body.tickets.map(ticket => ({
+        ...ticket,
+        quantity: parseInt(ticket.quantity)
+      }))
+    };
+    const event = new Event(eventData);
+    await event.save();
+    res.status(201).json(event);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get public events
+router.get('/public/events', async (req, res) => {
+  try {
+    const { page = 1, search = '', upcomingOnly = false } = req.query;
+    const pageSize = 10;
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     const skip = (page - 1) * pageSize;
     
     const query = {};
     
+<<<<<<< HEAD
     console.log('Query parameters:', {
       page, search, upcomingOnly, category, date, sort, minPrice, maxPrice, location, freeOnly
     });
 
     // Search filter
     if (search && search.trim() !== '') {
+=======
+    if (search) {
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
       query.$or = [
         { title: { $regex: search, $options: 'i' } },
         { description: { $regex: search, $options: 'i' } },
@@ -130,16 +169,20 @@ router.get('/public/events', async (req, res) => {
       ];
     }
     
+<<<<<<< HEAD
     // Location filter
     if (location && location.trim() !== '') {
       query.location = { $regex: location, $options: 'i' };
     }
     
     // Upcoming events filter
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     if (upcomingOnly === 'true') {
       query.date = { $gte: new Date() };
     }
     
+<<<<<<< HEAD
     // Category filter
     if (category && category.trim() !== '') {
       query.categories = { $in: [new RegExp(category, 'i')] };
@@ -204,12 +247,19 @@ router.get('/public/events', async (req, res) => {
       Event.find(query)
         .populate('organizer', 'name organizerInfo.organizationName')
         .sort(sortOptions)
+=======
+    const [events, total] = await Promise.all([
+      Event.find(query)
+        .populate('organizer', 'name')
+        .sort({ date: 1 })
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
         .skip(skip)
         .limit(pageSize)
         .select('-attendees'),
       Event.countDocuments(query)
     ]);
 
+<<<<<<< HEAD
     console.log(`Found ${events.length} events out of ${total} total`);
 
     // Enhance events with free ticket info
@@ -232,6 +282,20 @@ router.get('/public/events', async (req, res) => {
     res.status(500).json({ 
       msg: 'Failed to get events',
       error: process.env.NODE_ENV === 'development' ? error.message : undefined
+=======
+    res.json({
+      events,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / pageSize)
+    });
+  } catch (error) {
+    console.error("Get Public Events Error:", error.message);
+    res.status(500).json({ 
+      msg: process.env.NODE_ENV === 'development' 
+        ? error.message 
+        : 'Failed to get events' 
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     });
   }
 });
@@ -255,12 +319,19 @@ router.get('/', verifyOrganizer, async (req, res) => {
   }
 });
 
+<<<<<<< HEAD
 // Get single event details
+=======
+
+
+// Update event
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 router.get('/event/:eventId', async (req, res) => {
   try {
     const event = await Event.findById(req.params.eventId)
       .populate({
         path: 'organizer',
+<<<<<<< HEAD
         select: 'name email organizerInfo.organizationName organizerInfo.stripeAccountId organizerInfo.stripeAccountStatus'
       });
 
@@ -275,6 +346,13 @@ router.get('/event/:eventId', async (req, res) => {
     };
     
     res.json(enhancedEvent);
+=======
+        select: 'name email organizerInfo.stripeAccountId organizerInfo.stripeAccountStatus' // Populate organizer details
+      });
+
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+    res.json(event);
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

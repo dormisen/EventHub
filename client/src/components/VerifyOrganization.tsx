@@ -4,7 +4,10 @@ import API from '../api/axios';
 import Alert from './alert';
 import { Loader, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/Authcontext';
+<<<<<<< HEAD
 import debounce from 'lodash.debounce';
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 
 const VerifyOrganization = () => {
   const { checkAuthStatus } = useAuth();
@@ -22,8 +25,12 @@ const VerifyOrganization = () => {
       try {
         const response = await API.post('/auth/verify-organization', { token });
         if (response.data.success) {
+<<<<<<< HEAD
           const debouncedCheck = debounce(checkAuthStatus, 500, { leading: true, trailing: false });
           await debouncedCheck();
+=======
+          await checkAuthStatus();
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
           setSuccess(true);
           setTimeout(() => navigate('/organizer/dashboard'), 3000);
         }

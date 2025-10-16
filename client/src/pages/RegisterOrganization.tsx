@@ -112,6 +112,7 @@ export default function RegisterOrganization() {
     try {
       await upgradeToOrganizer(organizationData);
       toast.success('Organization profile submitted for verification!');
+<<<<<<< HEAD
       toast.success('Verification email has been resent. Please check your inbox.');
     } catch (error: unknown) {
       console.error('Registration error:', error);
@@ -122,6 +123,12 @@ export default function RegisterOrganization() {
         setServerError('Registration failed. Please try again.');
         toast.error('Registration failed. Please try again.');
       }
+=======
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      setServerError(error.message || 'Registration failed. Please try again.');
+      toast.error(error.message || 'Registration failed. Please try again.');
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
     } finally {
       setIsSubmitting(false);
     }
@@ -134,7 +141,10 @@ export default function RegisterOrganization() {
       token: user?.organizerInfo?.verificationToken 
     });
     toast.success('Verification email has been resent. Please check your inbox.');
+<<<<<<< HEAD
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+=======
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   } catch (error) {
     toast.error('Failed to resend verification email');
   }

@@ -11,10 +11,18 @@ const EventSchema = new mongoose.Schema({
   },
   image: {
     type: String,
+<<<<<<< HEAD
     default: function() {
       return defaultImages[Math.floor(Math.random() * defaultImages.length)];
     },
    
+=======
+    default: "",
+    validate: {
+      validator: (v) => v === "" || /^(https?:\/\/).+\.(jpg|jpeg|png|gif|webp)$/i.test(v),
+      message: "Invalid image URL format"
+    }
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
   },
   organizer: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   tickets: [{
@@ -30,11 +38,15 @@ const EventSchema = new mongoose.Schema({
     purchaseDate: Date,
     pricePaid: Number,
   }],
+<<<<<<< HEAD
   categories: { 
   type: [String], 
   default: ['general'],
   index: true 
 },
+=======
+  categories: [String],
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 averageRating: { type: Number, default: 0 },
 reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Review' }]
 }, { timestamps: true });

@@ -86,7 +86,11 @@ const UserTable = ({ users, onDelete }: { users: User[], onDelete: (userId: stri
 
 interface AdminDashboardProps {
   onDeleteUser: (userId: string) => Promise<void>;
+<<<<<<< HEAD
   onUpdateUser: (userData: User) => Promise<void>;
+=======
+  onUpdateUser: (userData: any) => Promise<void>;
+>>>>>>> a175ee5a7844f8e8b8b1a23e88f06aa8c8538a20
 }
 
 export default function AdminDashboard({ onDeleteUser }: AdminDashboardProps) {

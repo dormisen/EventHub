@@ -2,7 +2,6 @@ import express from "express";
 import Event from "../models/Event.js";
 import crypto from "crypto";
 import transporter from "../utils/mail.js";
-
 import 'dotenv/config';
 import jwt from "jsonwebtoken";
 import rateLimit from "express-rate-limit";

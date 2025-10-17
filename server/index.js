@@ -16,6 +16,7 @@ dotenv.config();
 const app = express();
 const allowedOrigins = [
   'https://event-hub-three-zeta.vercel.app',
+  'https://event-hub-t476.onrender.com',
   'http://localhost:5173'
 ];
 
@@ -62,7 +63,9 @@ app.use(helmet({
 
 const allowedOriginPatterns = [
   /^https:\/\/event-hub-.*\.vercel\.app$/,
-  /^https:\/\/event-hub-git-.*\.vercel\.app$/ 
+  /^https:\/\/event-hub-.*-.*\.vercel\.app$/,
+  /^https:\/\/event-hub-git-.*\.vercel\.app$/,
+  /^https:\/\/.*-event-hub.*\.vercel\.app$/   
 ];
 
 app.use(cors({
